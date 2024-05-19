@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Set Your Location</title>
+    <!-- Leaflet's CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <!-- Leaflet's JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <!-- Leaflet Control Geocoder CSS and JS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+    <style>
+        #map {
+            height: 70vh;
+            width: 100%;
+            position: relative;
+        }
+
+        #fixed-marker {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -100%);
+            z-index: 1000;
+            pointer-events: none;
+        }
+
+        #location-details {
+            margin-top: 20px;
+            font-family: Arial, sans-serif;
+        }
+
+        #current-location-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 1000;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>Set Your Delivery Location</h2>
+    <div id="map"></div>
+    <img id="fixed-marker" src="https://img.icons8.com/ios-filled/50/0000FF/marker.png" alt="Fixed Marker" />
+    <div id="location-details">
+        <strong>Coordinates:</strong> <span id="coordinates">Drag the map to set your location.</span><br>
+        <strong>Address:</strong> <span id="address">Drag the map to set your location.</span>
+    </div>
+    <button id="current-location-button">Current Location</button>
+
+    <script>
+        var map = L.map('map').setView([51.505, -0.09], 13);
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        }).addTo(map);
+
+        // Function to update the location details
+        function updateLocationDetails() {
+            var center = map.getCenter();
+            document.getElementById('coordinates').textContent = `Latitude: ${center.lat}, Longitude: ${center.lng}`;
+
+            // Reverse geocode the current location
+            fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${center.lat}&lon=${center.lng}`)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('address').textContent = data.display_name || 'Address not found';
+                })
+                .catch(err => console.error(err));
+        }
+
+        // Initial location details update
+        updateLocationDetails();
+
+        // Update location details when the map is moved
+        map.on('moveend', updateLocationDetails);
+
+        // Add the search control
+        var geocoder = L.Control.geocoder({
+            defaultMarkGeocode: false
+        }).on('markgeocode', function (e) {
+            var latlng = e.geocode.center;
+            map.setView(latlng, 16);
+        }).addTo(map);
+
+        // Use the Geolocation API to get the user's current location
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                var lat = position.coords.latitude;
+                var lng = position.coords.longitude;
+                map.setView([lat, lng], 16);
+                updateLocationDetails();
+            }, function () {
+                alert("Could not get your location");
+            });
+        } else {
+            alert("Geolocation is not supported by your browser");
+        }
+
+        // Add event listener to the current location button
+        document.getElementById('current-location-button').addEventListener('click', function () {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    var lat = position.coords.latitude;
+                    var lng = position.coords.longitude;
+                    map.setView([lat, lng], 16);
+                    updateLocationDetails();
+                }, function () {
+                    alert("Could not get your location");
+                });
+            } else {
+                alert("Geolocation is not supported by your browser");
+            }
+        });
+    </script>
+</body>
+
+</html>
