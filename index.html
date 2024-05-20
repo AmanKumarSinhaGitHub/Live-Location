@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
     <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
     <style>
+        /* Styling for the map and other elements */
         #map {
             height: 70vh;
             width: 100%;
@@ -45,17 +46,27 @@
 </head>
 
 <body>
+    <!-- Heading -->
     <h2>Set Your Delivery Location</h2>
+    <!-- Map container -->
     <div id="map"></div>
+    <!-- Fixed marker image -->
     <img id="fixed-marker" src="marker.png" alt="Fixed Marker" />
+    <!-- Location details -->
     <div id="location-details">
         <strong>Coordinates:</strong> <span id="coordinates">Drag the map to set your location.</span><br>
         <strong>Address:</strong> <span id="address">Drag the map to set your location.</span>
     </div>
+    <!-- Button to get current location -->
     <button id="current-location-button">Current Location</button>
 
     <script>
+        // JavaScript code to initialize the map and handle location functionality
+        
+        // Initialize the map
         var map = L.map('map').setView([51.505, -0.09], 13);
+        
+        // Add tile layer from OpenStreetMap
         L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
             attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
