@@ -2,6 +2,10 @@
 
 This project is a simple web application that allows users to set their delivery location using a map interface. It utilizes Leaflet, an open-source JavaScript library for interactive maps, and OpenStreetMap, a collaborative mapping project.
 
+## Live Demo
+
+Click Here to see the live demo: [Link](https://amankumarsinhagithub.github.io/Live-Location/)
+
 ## Features
 
 - **Map Interface**: Users can interact with the map to set their delivery location by dragging the marker.
