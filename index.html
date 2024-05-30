@@ -29,6 +29,8 @@
             transform: translate(-50%, -100%);
             z-index: 1000;
             pointer-events: none;
+            height: 3rem;
+            width: auto;
         }
 
         #location-details {
@@ -54,7 +56,6 @@
     <img id="fixed-marker" src="marker.png" alt="Fixed Marker" />
     <!-- Location details -->
     <div id="location-details">
-        <strong>Coordinates:</strong> <span id="coordinates">Drag the map to set your location.</span><br>
         <strong>Address:</strong> <span id="address">Drag the map to set your location.</span>
     </div>
     <!-- Button to get current location -->
@@ -64,6 +65,7 @@
         // JavaScript code to initialize the map and handle location functionality
         
         // Initialize the map
+        
         var map = L.map('map').setView([51.505, -0.09], 13);
         
         // Add tile layer from OpenStreetMap
@@ -75,7 +77,7 @@
         // Function to update the location details
         function updateLocationDetails() {
             var center = map.getCenter();
-            document.getElementById('coordinates').textContent = `Latitude: ${center.lat}, Longitude: ${center.lng}`;
+            // document.getElementById('coordinates').textContent = `Latitude: ${center.lat}, Longitude: ${center.lng}`;
 
             // Reverse geocode the current location
             fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${center.lat}&lon=${center.lng}`)
