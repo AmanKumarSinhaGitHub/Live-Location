@@ -34,7 +34,7 @@ Click Here to see the live demo: [Link](https://amankumarsinhagithub.github.io/L
 
 ## Credits
 
-This project was created by [Your Name].
+This project was created by Aman Sinha.
 
 ## License
 
